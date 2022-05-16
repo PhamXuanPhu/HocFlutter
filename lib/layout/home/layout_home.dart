@@ -1,11 +1,10 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:hocflutter/layout/home/layout_top5coin.dart';
-import 'package:hocflutter/layout/login/layout_login.dart';
+import 'package:hocflutter/layout/home/search/layout_search.dart';
+import 'package:hocflutter/layout/home/top_coin/layout_top5coin.dart';
 import 'package:hocflutter/resource/color.dart';
-import 'layout_100coin.dart';
-import 'layout_favorite.dart';
-import 'layout_search.dart';
+import '100coin/layout_100coin.dart';
+import 'Favorite/layout_favorite.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,12 +16,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int currentIndex = 0;
   final screens = [
-    const Coin100(),
-    const Top5Coin(),
-    const SearchCoin(),
-    const Favorite()
+    Coin100(),
+    Top5Coin(),
+    Search(),
+    Favorite()
   ];
-  final titles = ['Coin', 'Top 5 Coin', 'Search', 'Favorite'];
+  final titles = ['Coin', 'Top 5 Coin', 'Search', 'favorite'];
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _HomeState extends State<Home> {
               backgroundColor: colorMain),
           BottomNavigationBarItem(
               icon: Icon(CommunityMaterialIcons.heart_outline),
-              label: 'Favorite',
+              label: 'favorite',
               backgroundColor: colorMain)
         ],
       ),

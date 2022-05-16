@@ -66,8 +66,8 @@ class CoinsReposistory {
       final response = await Dio().get(
           'https://api.coingecko.com/api/v3/coins/$id/market_chart/range?vs_currency=usd&from=$from&to=$to');
       List<ChartCoinModel> list = [];
-      var bcs = jsonDecode(response.toString())['prices'];
-      for (var item in bcs) {
+      var b = jsonDecode(response.toString())['prices'];
+      for (var item in b) {
         list.add(ChartCoinModel(
             price: item[1],
             time: DateTime.fromMicrosecondsSinceEpoch(item[0])));

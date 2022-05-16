@@ -1,11 +1,11 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:hocflutter/layout/home/layout_100coin.dart';
 import 'package:hocflutter/resource/color.dart';
 import 'package:hocflutter/resource/render/dimens.dart';
 import 'package:hocflutter/resource/assets.dart';
 import '../../control/button.dart';
 import '../../control/textfiled_custom.dart';
+import '../home/100coin/layout_100coin.dart';
 import '../home/layout_home.dart';
 
 class Login extends StatelessWidget {
@@ -159,7 +159,7 @@ Widget body(BuildContext context) => Scaffold(
                     print('da click'),
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Coin100())),
+                  MaterialPageRoute(builder: (context) => Coin100())),
                   },
                   numWith: 1000.w,
                   styleButton: StyleButton.white,

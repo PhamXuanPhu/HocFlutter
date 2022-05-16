@@ -1,52 +1,17 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:hocflutter/models/ChartCoinModel.dart';
-import 'package:hocflutter/models/coin.dart';
-import 'package:hocflutter/reposistory/coinReposistory.dart';
+import 'package:get/get.dart';
+import 'package:hocflutter/layout/coin_detail/controller_coindetail.dart';
 import 'package:hocflutter/resource/render/dimens.dart';
-import '../../resource/color.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import '../../control/button.dart';
+import '../../models/coin.dart';
+import '../../resource/color.dart';
 
-class CoinDetailPage extends StatefulWidget {
-  const CoinDetailPage({Key? key, required this.data}) : super(key: key);
+class CoinDetail extends StatelessWidget {
+  CoinDetail({Key? key, required this.data}) : super(key: key);
+  var controller = Get.put(CoinDetailController());
   final Coin data;
-
-  @override
-  State<CoinDetailPage> createState() => _CoinDetailPageState();
-}
-
-class _CoinDetailPageState extends State<CoinDetailPage> {
-  List<charts.Series<ChartCoinModel, DateTime>> history = [];
-  int selected = 6;
-  late bool isFavorite = false;
-  CoinsReposistory coinsReposistory = CoinsReposistory();
-
-  @override
-  void initState() {
-    getData(24);
-    getFavorite();
-    super.initState();
-  }
-
-  void getFavorite() {
-    coinsReposistory.initDatabase();
-    coinsReposistory
-        .isFavorite(widget.data.id ?? '')
-        .then((value) => {isFavorite = value, setState(() {})});
-  }
-
-  void getData(int hour) async {
-    history =
-        await coinsReposistory.getHistoryOfCoin(hour, widget.data.id ?? '');
-    setState(() {});
-  }
-
-  Future<void> actionCoin(Coin coin) async {
-    isFavorite
-        ? {coinsReposistory.removeCoin(coin), isFavorite = false}
-        : {coinsReposistory.insertCoin(coin), isFavorite = true};
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,32 +23,44 @@ class _CoinDetailPageState extends State<CoinDetailPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  widget.data.name.toString(),
-                  style: const TextStyle(
-                    color: colorText,
-                    fontSize: 22,
+          Center(
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Button(
+                    text: 'Login',
+                    onClick: () => {
+                      controller.Getdata(data),
+                    },
+                    numWith: 1000.w,
+                    styleButton: StyleButton.white,
+                    iconData: CommunityMaterialIcons.application_import,
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    actionCoin(widget.data);
-                  },
-                  icon: Icon(
-                    isFavorite
-                        ? CommunityMaterialIcons.heart
-                        : CommunityMaterialIcons.heart_outline,
-                    color: colorText,
-                    size: 25,
+                  Obx(
+                    () => Text(
+                      controller.data.value.name.toString(),
+                      style: const TextStyle(
+                        color: colorText,
+                        fontSize: 22,
+                      ),
+                    ),
                   ),
-                )
-              ],
+                  IconButton(
+                    onPressed: () {
+                      controller.actionCoin(controller.data.value);
+                    },
+                    icon: Icon(
+                      controller.isFavorite.value
+                          ? CommunityMaterialIcons.heart
+                          : CommunityMaterialIcons.heart_outline,
+                      color: colorText,
+                      size: 25,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           buildHeader(),
@@ -104,12 +81,14 @@ class _CoinDetailPageState extends State<CoinDetailPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    widget.data.currentPrice.toString(),
-                    style: const TextStyle(
-                        color: colorText,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+                  Obx(
+                    () => Text(
+                      controller.data.value.currentPrice.toString(),
+                      style: const TextStyle(
+                          color: colorText,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   const Text(
                     'Price',
@@ -127,12 +106,14 @@ class _CoinDetailPageState extends State<CoinDetailPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    widget.data.priceChangePercentage24h.toString(),
-                    style: const TextStyle(
-                        color: colorText,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+                  Obx(
+                    () => Text(
+                      controller.data.value.priceChangePercentage24h.toString(),
+                      style: const TextStyle(
+                          color: colorText,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   const Text(
                     'Price Changed',
@@ -145,13 +126,15 @@ class _CoinDetailPageState extends State<CoinDetailPage> {
         ),
       );
 
-  Widget buildChart() => Container(
-        padding: const EdgeInsets.all(10),
-        height: 1000.w,
-        child: charts.TimeSeriesChart(
-          history,
-          animate: true,
-          dateTimeFactory: const charts.LocalDateTimeFactory(),
+  Widget buildChart() => Obx(
+        () => Container(
+          padding: const EdgeInsets.all(10),
+          height: 1000.w,
+          child: charts.TimeSeriesChart(
+            controller.history,
+            animate: true,
+            dateTimeFactory: const charts.LocalDateTimeFactory(),
+          ),
         ),
       );
 
@@ -198,20 +181,22 @@ class _CoinDetailPageState extends State<CoinDetailPage> {
 
   Widget customRadio(String text, int index) => ElevatedButton(
         onPressed: () {
-          setState(() {
-            selected = index;
-            getData(index);
-          });
+          controller.selected.value = index;
+          controller.getDataChart();
         },
-        child: Text(
-          text,
-          style: TextStyle(
-              color: (selected == index) ? colorWhite : colorText,
-              fontSize: 15),
+        child: Obx(
+          () => Text(
+            text,
+            style: TextStyle(
+                color: (controller.selected.value == index)
+                    ? colorWhite
+                    : colorText,
+                fontSize: 15),
+          ),
         ),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
-                (selected == index) ? colorGreen : colorWhite),
+                (controller.selected.value == index) ? colorGreen : colorWhite),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),

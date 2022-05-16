@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hocflutter/resource/color.dart';
 import 'package:hocflutter/resource/render/dimens.dart';
 import '../layout/coin_detail/layout_coin_detail.dart';
+import '../layout/coin_detail/layout_coindetail.dart';
 import '../models/coin.dart';
 import 'package:intl/intl.dart';
 
