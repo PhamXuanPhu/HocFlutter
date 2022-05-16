@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:get/get.dart';
-const guidelineBaseWidth = 414;
-const guidelineBaseHeight = 896;
+const guidelineBaseWidth = 1080;
+const guidelineBaseHeight = 2340;
 
 double get screenWidth => Get.width; //1800
 double get screenHeight => Get.height; //2560

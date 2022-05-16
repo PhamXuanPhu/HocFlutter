@@ -1,8 +1,6 @@
-import 'dart:js';
-
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:hocflutter/layout/home/layout_100coin.dart';
 import 'package:hocflutter/resource/color.dart';
 import 'package:hocflutter/resource/render/dimens.dart';
 import 'package:hocflutter/resource/assets.dart';
@@ -57,7 +55,6 @@ Widget formLogin() => Scaffold(
           TextFieldCustom(
             onChanged: (newString) => {print(newString)},
             text: "text",
-            isPassword: false,
             icon: const Icon(
               CommunityMaterialIcons.email_outline,
               color: colorText,
@@ -70,7 +67,7 @@ Widget formLogin() => Scaffold(
           TextFieldCustom(
             onChanged: (newString) => {print(newString)},
             text: "text",
-            isPassword: true,
+            isPassword: IsPassword.password,
             icon: const Icon(
               CommunityMaterialIcons.lock_outline,
               color: colorText,
@@ -92,7 +89,7 @@ Widget formLogin() => Scaffold(
             text: 'Login',
             onClick: () => {print('da click')},
             numWith: 1000.w,
-            styleButton: true,
+            styleButton: StyleButton.white,
           ),
         ],
       ),
@@ -126,7 +123,6 @@ Widget body(BuildContext context) => Scaffold(
                 TextFieldCustom(
                   onChanged: (newString) => {print(newString)},
                   text: "text",
-                  isPassword: false,
                   icon: const Icon(
                     CommunityMaterialIcons.email_outline,
                     color: colorText,
@@ -139,7 +135,7 @@ Widget body(BuildContext context) => Scaffold(
                 TextFieldCustom(
                   onChanged: (newString) => {print(newString)},
                   text: "text",
-                  isPassword: true,
+                  isPassword: IsPassword.password,
                   icon: const Icon(
                     CommunityMaterialIcons.lock_outline,
                     color: colorText,
@@ -163,10 +159,10 @@ Widget body(BuildContext context) => Scaffold(
                     print('da click'),
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Home())),
+                  MaterialPageRoute(builder: (context) => const Coin100())),
                   },
                   numWith: 1000.w,
-                  styleButton: true,
+                  styleButton: StyleButton.white,
                   iconData: CommunityMaterialIcons.application_import,
                 ),
                 SizedBox(

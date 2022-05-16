@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hocflutter/resource/color.dart';
 
@@ -11,14 +8,14 @@ class Button extends StatelessWidget {
       required this.onClick,
       this.numWith,
       this.numHeight = 40,
-      this.styleButton = false,
+      this.styleButton = StyleButton.main,
       this.iconData})
       : super(key: key);
   final String text;
   final Function() onClick;
   final double? numWith;
   final double? numHeight;
-  final bool? styleButton;
+  final StyleButton? styleButton;
   final IconData? iconData;
 
   @override
@@ -28,36 +25,36 @@ class Button extends StatelessWidget {
         width: numWith,
         child: iconData != null
             ? ElevatedButton.icon(
-                icon: styleButton != null && styleButton == true
-                    ? iconStyleTrue(iconData!)
-                    : iconStyleFalse(iconData!),
+                icon: styleButton == StyleButton.main
+                    ? iconStyleMain(iconData!)
+                    : iconStyleWhite(iconData!),
                 onPressed: onClick,
                 label: Text(
                   text,
-                  style: styleButton != null && styleButton == true
-                      ? textStyleTrue()
-                      : textStyleFalse(),
+                  style: styleButton == StyleButton.main
+                      ? textStyleMain()
+                      : textStyleWhite(),
                 ),
-                style: styleButton != null && styleButton == true
-                    ? buttonStyleTrue()
-                    : buttonStyleFalse(),
+                style: styleButton == StyleButton.main
+                    ? buttonStyleMain()
+                    : buttonStyleWhite(),
               )
             : ElevatedButton(
                 onPressed: onClick,
                 child: Text(
                   text,
-                  style: styleButton != null && styleButton == true
-                      ? textStyleTrue()
-                      : textStyleFalse(),
+                  style: styleButton == StyleButton.main
+                      ? textStyleMain()
+                      : textStyleWhite(),
                 ),
-                style: styleButton != null && styleButton == true
-                    ? buttonStyleTrue()
-                    : buttonStyleFalse(),
+                style: styleButton == StyleButton.main
+                    ? buttonStyleMain()
+                    : buttonStyleWhite(),
               ));
   }
 }
 
-ButtonStyle buttonStyleTrue() => ButtonStyle(
+ButtonStyle buttonStyleMain() => ButtonStyle(
 
     /// màu khi focus
     /// overlayColor: MaterialStateProperty.all(color_red),
@@ -74,7 +71,7 @@ ButtonStyle buttonStyleTrue() => ButtonStyle(
       ),
     )));
 
-ButtonStyle buttonStyleFalse() => ButtonStyle(
+ButtonStyle buttonStyleWhite() => ButtonStyle(
     overlayColor: MaterialStateProperty.all(colorBtnFocus),
 
     ///foregroundColor: MaterialStateProperty.all(color_red),
@@ -89,18 +86,20 @@ ButtonStyle buttonStyleFalse() => ButtonStyle(
       ),
     )));
 
-TextStyle textStyleTrue() => const TextStyle(
+TextStyle textStyleMain() => const TextStyle(
       color: colorWhite,
       fontSize: 15,
     );
 
-TextStyle textStyleFalse() => const TextStyle(
+TextStyle textStyleWhite() => const TextStyle(
       color: colorBtn,
       fontSize: 15,
     );
 
-Icon iconStyleTrue(IconData iconData) =>
+Icon iconStyleMain(IconData iconData) =>
     Icon(iconData, color: colorWhite, size: 20);
 
-Icon iconStyleFalse(IconData iconData) =>
+Icon iconStyleWhite(IconData iconData) =>
     Icon(iconData, color: colorBtn, size: 20);
+
+enum StyleButton { main, white }

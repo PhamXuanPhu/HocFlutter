@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:hocflutter/control/item.dart';
+import 'package:hocflutter/layout/home/layout_top5coin.dart';
+import 'package:hocflutter/layout/login/layout_login.dart';
 import 'package:hocflutter/resource/color.dart';
-import 'package:hocflutter/resource/render/dimens.dart';
+import 'layout_100coin.dart';
+import 'layout_favorite.dart';
+import 'layout_search.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,38 +15,45 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final data = ['item1','item2','item3','item4','item5','item6','item7','item8','item9','item10'
-  ,'item1','item2','item3','item4','item5','item6','item7','item8','item9','item10'
-  ,'item1','item2','item3','item4','item5','item6','item7','item8','item9','item10'];
+  int currentIndex = 0;
+  final screens = [
+    const Coin100(),
+    const Top5Coin(),
+    const SearchCoin(),
+    const Favorite()
+  ];
+  final titles = ['Coin', 'Top 5 Coin', 'Search', 'Favorite'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 0.2.hf,
-            child: buildListView(),
-          ),
-          Container(
-            height: 0.8.hf,
-            child:  buildGridView()
-          )],
+      appBar: AppBar(
+        title: Text(titles[currentIndex]),
+        centerTitle: true,
+      ),
+      body: screens[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() => currentIndex = index),
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(CommunityMaterialIcons.home),
+              label: 'Coin',
+              backgroundColor: colorMain),
+          BottomNavigationBarItem(
+              icon: Icon(CommunityMaterialIcons.trending_up),
+              label: 'Top 5',
+              backgroundColor: colorMain),
+          BottomNavigationBarItem(
+              icon: Icon(CommunityMaterialIcons.account_search_outline),
+              label: 'Search',
+              backgroundColor: colorMain),
+          BottomNavigationBarItem(
+              icon: Icon(CommunityMaterialIcons.heart_outline),
+              label: 'Favorite',
+              backgroundColor: colorMain)
+        ],
       ),
     );
   }
-  Widget buildListView() => ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: data.length,
-      itemBuilder: (BuildContext context, index) {
-        return item(data[index]);
-      });
-
-  Widget buildGridView() => GridView.builder(
-      itemCount: data.length,
-      gridDelegate:
-      const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-      itemBuilder: (BuildContext context, index) {
-        return item(data[index]);
-      });
 }

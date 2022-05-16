@@ -1,5 +1,7 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:hocflutter/control/textfiled_custom.dart';
 import '../resource/color.dart';
 
 class TextFieldCustom extends StatefulWidget {
@@ -8,13 +10,13 @@ class TextFieldCustom extends StatefulWidget {
     required this.text,
     this.fontSize,
     this.icon,
-    required this.isPassword,
+    this.isPassword = IsPassword.none,
     this.onChanged,
   }) : super(key: key);
   final String text;
   final double? fontSize;
   final Widget? icon;
-  final bool isPassword;
+  final IsPassword? isPassword;
   final Function(String)? onChanged;
 
   @override
@@ -42,14 +44,17 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
       keyboardType: TextInputType.emailAddress,
 
       /// thay đổi kiểu của password
-      obscureText: widget.isPassword ? enableIsPassword : false,
+      obscureText: widget.isPassword == IsPassword.password ? enableIsPassword : false,
       style: TextStyle(
         fontSize: widget.fontSize,
         color: colorText,
       ),
       decoration: InputDecoration(
 
-        ///labelText: text,
+          /// canh giua center text khi set chieu cao
+          contentPadding: EdgeInsets.zero,
+
+          ///labelText: text,
           hintText: widget.text,
 
           /// thêm icon trước
@@ -60,32 +65,29 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
           ///       ? ShowIconPassword()
           ///     : showIconClear(clearController),
 
-          suffixIcon: widget.isPassword
+          suffixIcon: widget.isPassword == IsPassword.password
               ? IconButton(
-              icon: enableIsPassword
-                  ? const Icon(
-                CommunityMaterialIcons.eye_off_outline,
-                color: colorText,
-                size: 20,
-              )
-                  : const Icon(
-                CommunityMaterialIcons.eye_outline,
-                color: colorText,
-                size: 20,
-              ),
-              onPressed: () => setState(() =>
-              {enableIsPassword = !enableIsPassword}))
-              : showIconClear(controller),
+                  icon: enableIsPassword
+                      ? const Icon(
+                          CommunityMaterialIcons.eye_off_outline,
+                          color: colorText,
+                          size: 20,
+                        )
+                      : const Icon(
+                          CommunityMaterialIcons.eye_outline,
+                          color: colorText,
+                          size: 20,
+                        ),
+                  onPressed: () =>
+                      setState(() => {enableIsPassword = !enableIsPassword}))
+              : showIconClear(controller, widget.onChanged!),
 
           ///fillColor, filled thay đổi màu background textfield
           fillColor: Colors.white,
           filled: true,
-          hintStyle: TextStyle(
-            fontSize: widget.fontSize,
-            color: colorHint
-          ),
+          hintStyle: TextStyle(fontSize: widget.fontSize, color: colorHint),
           border: OutlineInputBorder(
-            
+
               /// thay đổi border
               borderSide: const BorderSide(color: colorWhite),
               borderRadius: BorderRadius.circular(10))),
@@ -95,18 +97,20 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
 }
 
 /// setup icon clear
-IconButton? showIconClear(TextEditingController clearController) =>
+IconButton? showIconClear(
+        TextEditingController clearController, Function(String) onChanged) =>
     (clearController.text.isEmpty
         ? null
         : IconButton(
-      onPressed: () => clearController.clear(),
-      icon: const Icon(
-        CommunityMaterialIcons.close_circle_outline,
-        color: colorText,
-        size: 20,
-      ),
-    ));
+            onPressed: () => {clearController.clear(), onChanged('')},
+            icon: const Icon(
+              CommunityMaterialIcons.close_circle_outline,
+              color: colorText,
+              size: 20,
+            ),
+          ));
 
+enum IsPassword { none, password }
 /// chưa sài, không work
 
 class ShowIconPassword extends StatefulWidget {
@@ -115,7 +119,6 @@ class ShowIconPassword extends StatefulWidget {
   @override
   State<ShowIconPassword> createState() => _ShowIconPasswordState();
 }
-
 class _ShowIconPasswordState extends State<ShowIconPassword> {
   bool enableIsPassword = false;
 
@@ -129,15 +132,15 @@ class _ShowIconPasswordState extends State<ShowIconPassword> {
     return IconButton(
         icon: enableIsPassword
             ? const Icon(
-          CommunityMaterialIcons.eye_off_outline,
-          color: colorText,
-          size: 20,
-        )
+                CommunityMaterialIcons.eye_off_outline,
+                color: colorText,
+                size: 20,
+              )
             : const Icon(
-          CommunityMaterialIcons.eye_outline,
-          color: colorText,
-          size: 20,
-        ),
+                CommunityMaterialIcons.eye_outline,
+                color: colorText,
+                size: 20,
+              ),
         onPressed: () => setState(() => enableIsPassword = !enableIsPassword));
   }
 }
